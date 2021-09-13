@@ -1,0 +1,29 @@
+{
+	"name": "uccp_population_rawgz_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "uccp_blobstorage_ls",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "raw"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Population_by_age.tsv.gz",
+				"container": "poblacion"
+			},
+			"columnDelimiter": "\t",
+			"compressionCodec": "gzip",
+			"compressionLevel": "Optimal",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

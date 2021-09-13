@@ -1,0 +1,145 @@
+{
+	"name": "uccp_ingest_population_data_pl",
+	"properties": {
+		"activities": [
+			{
+				"name": "Check if File Exist",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "uccp_population_rawgz_ds",
+						"type": "DatasetReference"
+					},
+					"timeout": "1.00:00:00",
+					"sleep": 600,
+					"minimumSize": 1024
+				}
+			},
+			{
+				"name": "Get File Metadata",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Check if File Exist",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "uccp_population_rawgz_ds",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"columnCount"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "If Column Count Matches",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get File Metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Get File Metadata').output.columnCount, 13)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Copy Poblacion Data",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:05:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "uccp_population_rawgz_ds",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "uccp_population_rawtsv_ds",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"concurrency": 1,
+		"folder": {
+			"name": "Ingest"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-09-06T22:40:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

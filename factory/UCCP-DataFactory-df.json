@@ -1,0 +1,9 @@
+{
+	"name": "UCCP-DataFactory-df",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "01bdac40-b91c-4ca4-ae73-b7d652ccc655",
+		"tenantId": "f833b249-d640-4d0c-bd8f-e4e317981325"
+	}
+}

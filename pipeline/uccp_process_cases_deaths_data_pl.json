@@ -1,0 +1,37 @@
+{
+	"name": "uccp_process_cases_deaths_data_pl",
+	"properties": {
+		"activities": [
+			{
+				"name": "uccp_transform_cases_deaths_df",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "uccp_transform_cases_deaths_ds",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Proccess"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-09-13T18:24:16Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

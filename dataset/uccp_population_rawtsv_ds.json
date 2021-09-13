@@ -1,0 +1,28 @@
+{
+	"name": "uccp_population_rawtsv_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "uccp_adlsa_ls",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "raw"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "poblacion_by_age_tsv",
+				"folderPath": "poblacion",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": "\t",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
