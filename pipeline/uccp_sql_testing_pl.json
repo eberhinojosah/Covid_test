@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "uccp_sql_testing",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
