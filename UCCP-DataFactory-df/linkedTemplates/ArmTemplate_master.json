@@ -1,0 +1,104 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "UCCP-DataFactory-df"
+		},
+		"uccp_adlsa_ls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'uccp_adlsa_ls'"
+		},
+		"uccp_blobstorage_ls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'uccp_blobstorage_ls'"
+		},
+		"uccp_db_covid_cluster_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'uccp_db_covid_cluster_ls'"
+		},
+		"uccp_sql_coviddb_ls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'uccp_sql_coviddb_ls'"
+		},
+		"uccp_adlsa_ls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://uccpsadl.dfs.core.windows.net"
+		},
+		"uccp_inges_poblacion_data_tr_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/ec44e441-f780-4bd5-b73d-ea8a8f1065df/resourceGroups/UCCP-RG/providers/Microsoft.Storage/storageAccounts/uccpsa"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "UCCP-DataFactory-df_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"uccp_adlsa_ls_accountKey": {
+						"value": "[parameters('uccp_adlsa_ls_accountKey')]"
+					},
+					"uccp_blobstorage_ls_connectionString": {
+						"value": "[parameters('uccp_blobstorage_ls_connectionString')]"
+					},
+					"uccp_db_covid_cluster_ls_accessToken": {
+						"value": "[parameters('uccp_db_covid_cluster_ls_accessToken')]"
+					},
+					"uccp_sql_coviddb_ls_connectionString": {
+						"value": "[parameters('uccp_sql_coviddb_ls_connectionString')]"
+					},
+					"uccp_adlsa_ls_properties_typeProperties_url": {
+						"value": "[parameters('uccp_adlsa_ls_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "UCCP-DataFactory-df_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"uccp_inges_poblacion_data_tr_properties_typeProperties_scope": {
+						"value": "[parameters('uccp_inges_poblacion_data_tr_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'UCCP-DataFactory-df_ArmTemplate_0')]"
+			]
+		}
+	]
+}
